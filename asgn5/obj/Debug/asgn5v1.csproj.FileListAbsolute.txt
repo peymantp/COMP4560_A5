@@ -22,3 +22,11 @@ J:\COMP\4560\Assignments\A5\asgn5\obj\Debug\asgn5v1.Transformer.resources
 J:\COMP\4560\Assignments\A5\asgn5\obj\Debug\asgn5v1.csproj.GenerateResource.Cache
 J:\COMP\4560\Assignments\A5\asgn5\obj\Debug\asgn5v1.exe
 J:\COMP\4560\Assignments\A5\asgn5\obj\Debug\asgn5v1.pdb
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.exe
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.pdb
+C:\Users\Student\Desktop\A5\asgn5\bin\Debug\asgn5v1.exe
+C:\Users\Student\Desktop\A5\asgn5\bin\Debug\asgn5v1.pdb
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.csprojResolveAssemblyReference.cache
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.AboutDialogBox.resources
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.Transformer.resources
+C:\Users\Student\Desktop\A5\asgn5\obj\Debug\asgn5v1.csproj.GenerateResource.Cache

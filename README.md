@@ -42,16 +42,18 @@ All geometric transformations of the screen image must be implemented using the 
  
 
 
-Evaluation and Deadlines
+<b>Evaluation and Deadlines</b>
 
 Completed assignments must be demonstrated to a laboratory instructor in a scheduled tutorial session by the end of the fourth tutorial period following the distribution of this assignment sheet.  Except in unusual circumstances, you are expected to demonstrate the final version of your program no later than the tutorial session that week scheduled for your set.  Also, a zip file of the various files in your project must be submitted to the COMP 4560 course folder on the In: drive by the end of that lab period. (Use a name of the form LastnameFirstname.setnum.asgn5.zip.  Include only those files necessary to regenerate the project – omit temporary files created during the build or compile process.).  
 
 I will also be checking your works in progress on the following dates:
+
 <b>
 Week of October 31:  shape initializes correctly
 Week of November 7 : translation, scaling, and rotation by 0.05 radians
 Week of November 14: the finished product (shear, and continuous rotation)
 </b>
+
 The marks for this assignment are the sum of two assessments:  (i) 30 marks based on a final demonstration that your program has all of the functionality described above and that you have submitted the zip file as described, and, (ii) 10 marks for a convincing explanation of the implementation of one or more of the sets of event handlers in your program.  Since this is a major assignment, it is worth approximately half your total assignment mark.
 
 When you demonstrate your program for marking, we will use a data file which conforms to the principles stated above, but yields a shape different from the shapes in the “letter Q” files provided for your use during the program development stage.  Thus, you need to make sure that your program does not make use of any features of the “letter Q” shape that might not apply to any other three-dimensional shape.

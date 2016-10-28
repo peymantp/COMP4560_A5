@@ -99,14 +99,14 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="Transformer.cs">
       <SubType>Form</SubType>
     </Compile>
     <EmbeddedResource Include="AboutDialogBox.resx">
       <DependentUpon>AboutDialogBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Transformer.resx">
+      <DependentUpon>Transformer.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="App.ico" />
   </ItemGroup>

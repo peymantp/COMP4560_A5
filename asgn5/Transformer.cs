@@ -345,18 +345,36 @@ namespace asgn5v1
                     for (int j = 0; j < 4; j++)
                     {
                         temp = 0.0d;
-                        for (k = 0; k < 4; k++)
+                        for (k = 0; k < 4; k++) { 
                             temp += vertices[i, k] * ctrans[k, j];
+                        }
                         scrnpts[i, j] = temp;
                     }
                 }
 
                 //now draw the lines
-
+                var tempPem = pen;
                 for (int i = 0; i < numlines; i++)
                 {
-                    grfx.DrawLine(pen, (int)scrnpts[lines[i, 0], 0], (int)scrnpts[lines[i, 0], 1],
-                        (int)scrnpts[lines[i, 1], 0], (int)scrnpts[lines[i, 1], 1]);
+                    if (scrnpts[lines[i, 0], 0] == (int)scrnpts[lines[i, 0], 1] || (int)scrnpts[lines[i, 1], 0] == (int)scrnpts[lines[i, 1], 1])
+                    {
+                        tempPem.Color = Color.Blue;
+                    }
+                    else if (scrnpts[lines[i, 0], 0] == (int)scrnpts[lines[i, 1], 0])
+                    {
+                        tempPem.Color = Color.Red;
+                    } else  if ((int)scrnpts[lines[i, 0], 1] == (int)scrnpts[lines[i, 1], 1])
+                    {
+                        tempPem.Color = Color.Green;
+                    } else
+                    {
+                        tempPem = pen;
+                    }
+                    grfx.DrawLine(tempPem, 
+                        (int)scrnpts[lines[i, 0], 0], //x1
+                        (int)scrnpts[lines[i, 0], 1], //y1
+                        (int)scrnpts[lines[i, 1], 0], //x2
+                        (int)scrnpts[lines[i, 1], 1]);//y2
                 }
 
 
@@ -472,13 +490,46 @@ namespace asgn5v1
 		} // end of DecodeLines
 
 		void setIdentity(double[,] A,int nrow,int ncol)
-		{
-			for (int i = 0; i < nrow;i++) 
+        {
+            var lowestX = Double.MaxValue;
+            var largestY = Double.MinValue;
+            var index = 0;
+            for (int i = 0; i < nrow;i++) 
 			{
-				for (int j = 0; j < ncol; j++) A[i,j] = 0.0d;
+				for (int j = 0; j < ncol; j++) {
+                    A[i,j] = 0.0d;
+                }
 				A[i,i] = 1.0d;
 			}
-		}// end of setIdentity
+            for(int i = 0; i < scrnpts.GetLength(0); i++)
+            {
+                if (vertices[i, 1] > largestY)
+                {
+                    if (vertices[i, 0] < lowestX)
+                    {
+                        lowestX = vertices[i, 0];
+                        largestY = vertices[i, 1];
+                        index = i;
+                    }
+                }
+            }
+            A[0, 0] = 0.0d;
+            A[0, 1] = 1.0d;
+            A[1, 0] = -1.0d;
+            A[1, 1] = 0.0d;
+            //A[3, 3] = -1.0d;
+            A[3, 0] = largestY;
+            //A[3, 1] = largestY;
+
+            /* reflect            
+            A[0, 0] = 5.0d;
+            A[1, 1] = -5.0d;
+            A[2, 2] = -5.0d;
+            A[3, 0] = -lowestX;
+            A[3, 1] = -vertices[index, 1];
+            A[3, 2] = -vertices[index, 2];
+            */
+        }// end of setIdentity
       
 
 		private void Transformer_Load(object sender, System.EventArgs e)
