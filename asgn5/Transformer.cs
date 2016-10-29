@@ -492,8 +492,16 @@ namespace asgn5v1
 		void setIdentity(double[,] A,int nrow,int ncol)
         {
             var lowestX = Double.MaxValue;
+            var largestX = Double.MinValue;
+            var lowestY = Double.MaxValue;
             var largestY = Double.MinValue;
-            var index = 0;
+            var lowestZ = Double.MaxValue;
+            var largestz = Double.MinValue;
+            var verticalHeightRatio = 0.0d;
+            var middleOfShapeX = 0.0d;
+            var middleOfShapeY = 0.0d;
+            var middleOfShapeZ = 0.0d;
+
             for (int i = 0; i < nrow;i++) 
 			{
 				for (int j = 0; j < ncol; j++) {
@@ -501,34 +509,55 @@ namespace asgn5v1
                 }
 				A[i,i] = 1.0d;
 			}
-            for(int i = 0; i < scrnpts.GetLength(0); i++)
+
+            //point to set as (0,0)
+            for(int i = 0; i < vertices.GetLength(0); i++)
             {
+                if (vertices[i, 0] == -1) break;
+                if (vertices[i, 0] > largestX)
+                {
+                    largestX = vertices[i, 0];
+                }
+                if (vertices[i, 0] < lowestX)
+                {
+                    lowestX = vertices[i, 0];
+                }
                 if (vertices[i, 1] > largestY)
                 {
-                    if (vertices[i, 0] < lowestX)
-                    {
-                        lowestX = vertices[i, 0];
-                        largestY = vertices[i, 1];
-                        index = i;
-                    }
+                    largestY = vertices[i, 1];
+                }
+                if (vertices[i, 1] < lowestY)
+                {
+                    lowestY = vertices[i, 1];
+                }
+                if (vertices[i, 3] > largestz)
+                {
+                    largestz = vertices[i, 3];
+                }
+                if (vertices[i, 3] < lowestZ)
+                {
+                    lowestZ = vertices[i, 3];
                 }
             }
-            A[0, 0] = 0.0d;
-            A[0, 1] = 1.0d;
-            A[1, 0] = -1.0d;
-            A[1, 1] = 0.0d;
-            //A[3, 3] = -1.0d;
-            A[3, 0] = largestY;
-            //A[3, 1] = largestY;
 
-            /* reflect            
-            A[0, 0] = 5.0d;
-            A[1, 1] = -5.0d;
-            A[2, 2] = -5.0d;
-            A[3, 0] = -lowestX;
-            A[3, 1] = -vertices[index, 1];
-            A[3, 2] = -vertices[index, 2];
+            verticalHeightRatio = ClientSize.Height / 2.0d / (largestY - lowestY);
+            middleOfShapeX = ClientSize.Width / 2.0d - largestX * verticalHeightRatio / 2;
+            middleOfShapeY = ClientSize.Height / 2.0d - largestY * verticalHeightRatio / 2;
+            /*
+            A[0, 0] = 0.0d;
+            A[0, 1] = verticalHeightRatio * 1.0d;
+            A[1, 0] = verticalHeightRatio * -1.0d;
+            A[1, 1] = 0.0d;
+            A[3, 0] = verticalHeightRatio * largestY + middleOfShapeX;
+            A[3, 1] = middleOfShapeY;
             */
+
+            A[0, 0] = verticalHeightRatio * 1.0d;
+            A[1, 1] = verticalHeightRatio * -1.0d;
+            A[2, 2] = verticalHeightRatio * -1.0d;
+            A[3, 0] = middleOfShapeX;
+            A[3, 1] = verticalHeightRatio * largestY + middleOfShapeY;
+            //A[3, 3] = verticalHeightRatio * largestY;
         }// end of setIdentity
       
 
