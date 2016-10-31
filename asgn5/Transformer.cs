@@ -311,7 +311,6 @@ namespace asgn5v1
             this.ClientSize = new System.Drawing.Size(508, 306);
             this.Controls.Add(this.toolBar1);
             this.Name = "Transformer";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Transformer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -496,7 +495,7 @@ namespace asgn5v1
             var lowestY = Double.MaxValue;
             var largestY = Double.MinValue;
             var lowestZ = Double.MaxValue;
-            var largestz = Double.MinValue;
+            var largestZ = Double.MinValue;
             var verticalHeightRatio = 0.0d;
             var middleOfShapeX = 0.0d;
             var middleOfShapeY = 0.0d;
@@ -530,9 +529,9 @@ namespace asgn5v1
                 {
                     lowestY = vertices[i, 1];
                 }
-                if (vertices[i, 3] > largestz)
+                if (vertices[i, 3] > largestZ)
                 {
-                    largestz = vertices[i, 3];
+                    largestZ = vertices[i, 3];
                 }
                 if (vertices[i, 3] < lowestZ)
                 {
@@ -541,16 +540,9 @@ namespace asgn5v1
             }
 
             verticalHeightRatio = ClientSize.Height / 2.0d / (largestY - lowestY);
-            middleOfShapeX = ClientSize.Width / 2.0d - largestX * verticalHeightRatio / 2;
-            middleOfShapeY = ClientSize.Height / 2.0d - largestY * verticalHeightRatio / 2;
-            /*
-            A[0, 0] = 0.0d;
-            A[0, 1] = verticalHeightRatio * 1.0d;
-            A[1, 0] = verticalHeightRatio * -1.0d;
-            A[1, 1] = 0.0d;
-            A[3, 0] = verticalHeightRatio * largestY + middleOfShapeX;
-            A[3, 1] = middleOfShapeY;
-            */
+            middleOfShapeX = (ClientSize.Width / 2.0d - largestX * verticalHeightRatio / 2) - lowestX;
+            middleOfShapeY = (ClientSize.Height / 2.0d - largestY * verticalHeightRatio / 2) - lowestY;
+            middleOfShapeZ = (largestZ - lowestZ) / 2;
 
             A[0, 0] = verticalHeightRatio * 1.0d;
             A[1, 1] = verticalHeightRatio * -1.0d;
