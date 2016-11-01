@@ -536,7 +536,6 @@ namespace asgn5v1
             A[3, 1] = verticalHeightRatio * largestY + middleOfShapeY;
             //A[3, 3] = verticalHeightRatio * largestY;
         }// end of setIdentity
-      
 
 		private void Transformer_Load(object sender, System.EventArgs e)
 		{
@@ -562,7 +561,18 @@ namespace asgn5v1
             }
             ctrans = tempMatrix;
         }
-		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
+
+        private void toOrigin()
+        {
+            //TODO
+        }
+
+        private void center()
+        {
+            //TODO
+        }
+
+        private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == transleftbtn)
 			{
@@ -609,9 +619,18 @@ namespace asgn5v1
                 multiply(downTrans);
                 Refresh();
 			}
-			if (e.Button == scaleupbtn) 
+			if (e.Button == scaleupbtn) //TODO
 			{
-				Refresh();
+                double[,] scaleUpTrans = new double[4, 4];
+                for (var i = 0; i < scaleUpTrans.GetLength(1); ++i)
+                {
+                    scaleUpTrans[i, i] = 1.1;
+                }
+                scaleUpTrans[3, 3] = 1;
+                //toOrigin();
+                multiply(scaleUpTrans);
+                //center();
+                Refresh();
 			}
 			if (e.Button == scaledownbtn) 
 			{
