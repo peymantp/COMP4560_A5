@@ -352,24 +352,9 @@ namespace asgn5v1
                 }
 
                 //now draw the lines
-                var tempPem = pen;
                 for (int i = 0; i < numlines; i++)
                 {
-                    if (scrnpts[lines[i, 0], 0] == (int)scrnpts[lines[i, 0], 1] || (int)scrnpts[lines[i, 1], 0] == (int)scrnpts[lines[i, 1], 1])
-                    {
-                        tempPem.Color = Color.Blue;
-                    }
-                    else if (scrnpts[lines[i, 0], 0] == (int)scrnpts[lines[i, 1], 0])
-                    {
-                        tempPem.Color = Color.Red;
-                    } else  if ((int)scrnpts[lines[i, 0], 1] == (int)scrnpts[lines[i, 1], 1])
-                    {
-                        tempPem.Color = Color.Green;
-                    } else
-                    {
-                        tempPem = pen;
-                    }
-                    grfx.DrawLine(tempPem, 
+                    grfx.DrawLine(pen, 
                         (int)scrnpts[lines[i, 0], 0], //x1
                         (int)scrnpts[lines[i, 0], 1], //y1
                         (int)scrnpts[lines[i, 1], 0], //x2
@@ -558,24 +543,71 @@ namespace asgn5v1
 			
 		}
 
+        private void multiply(double[,] tran)
+        {
+            int k;
+            double temp;
+            double[,] tempMatrix = new double[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    temp = 0.0d;
+                    for (k = 0; k < 4; k++)
+                    {
+                        temp += ctrans[i, k] * tran[k, j];
+                    }
+                    tempMatrix[i, j] = temp;
+                }
+            }
+            ctrans = tempMatrix;
+        }
 		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == transleftbtn)
 			{
-				Refresh();
+                double[,] leftTrans = new double[4, 4];
+                for(var i = 0; i < leftTrans.GetLength(1); ++i)
+                {
+                    leftTrans[i, i] = 1;
+                }
+                leftTrans[3, 0] = -75;
+                multiply(leftTrans);
+                Refresh();
 			}
 			if (e.Button == transrightbtn) 
 			{
-				Refresh();
+                double[,] rightTrans = new double[4, 4];
+                for (var i = 0; i < rightTrans.GetLength(1); ++i)
+                {
+                    rightTrans[i, i] = 1;
+                }
+                rightTrans[3, 0] = 75;
+                multiply(rightTrans);
+                Refresh();
 			}
 			if (e.Button == transupbtn)
-			{
-				Refresh();
+            {
+                double[,] upTrans = new double[4, 4];
+                for (var i = 0; i < upTrans.GetLength(1); ++i)
+                {
+                    upTrans[i, i] = 1;
+                }
+                upTrans[3, 1] = -35;
+                multiply(upTrans);
+                Refresh();
 			}
 			
 			if(e.Button == transdownbtn)
-			{
-				Refresh();
+            {
+                double[,] downTrans = new double[4, 4];
+                for (var i = 0; i < downTrans.GetLength(1); ++i)
+                {
+                    downTrans[i, i] = 1;
+                }
+                downTrans[3, 1] = 35;
+                multiply(downTrans);
+                Refresh();
 			}
 			if (e.Button == scaleupbtn) 
 			{
@@ -631,11 +663,6 @@ namespace asgn5v1
 			{
 				Close();
 			}
-
 		}
-
-		
 	}
-
-	
 }
