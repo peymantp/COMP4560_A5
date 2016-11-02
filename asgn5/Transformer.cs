@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -14,7 +15,10 @@ namespace asgn5v1
 	/// </summary>
 	public class Transformer : System.Windows.Forms.Form
 	{
-		private System.ComponentModel.IContainer components;
+        private const int X_TRANSLATION = -75;
+        private const int Y_TRANSLATION = 35;
+        private const double SCALE_UP = 1.1;
+        private System.ComponentModel.IContainer components;
 		//private bool GetNewData();
 
 		// basic data for Transformer
@@ -434,7 +438,7 @@ namespace asgn5v1
 				return false;
 			}
 			scrnpts = new double[numpts,4];
-			setIdentity(ctrans,4,4);  //initialize transformation matrix to identity
+			setIdentity();  //initialize transformation matrix to identity
 			return true;
 		} // end of GetNewData
 
@@ -473,39 +477,18 @@ namespace asgn5v1
 			}
 		} // end of DecodeLines
 
-		void setIdentity(double[,] A,int nrow,int ncol)
+		void setIdentity()
         {
-            var lowestX = Double.MaxValue;
-            var largestX = Double.MinValue;
             var lowestY = Double.MaxValue;
             var largestY = Double.MinValue;
-            var lowestZ = Double.MaxValue;
-            var largestZ = Double.MinValue;
-            var verticalHeightRatio = 0.0d;
-            var middleOfShapeX = 0.0d;
-            var middleOfShapeY = 0.0d;
-            var middleOfShapeZ = 0.0d;
+            var scaleRatio = 0.0d;
 
-            for (int i = 0; i < nrow;i++) 
-			{
-				for (int j = 0; j < ncol; j++) {
-                    A[i,j] = 0.0d;
-                }
-				A[i,i] = 1.0d;
-			}
-
-            //point to set as (0,0)
-            for(int i = 0; i < vertices.GetLength(0); i++)
+            //set center of shape at origin
+            ctrans = new double[,] { { 1, 0, 0, 0 }, { 0, -1, 0, 0 }, { 0, 0, 1, 0 }, { -vertices[0, 0], vertices[0, 1], -vertices[0, 2], 1 } };
+            
+            for (int i = 0; i < vertices.GetLength(0); i++)
             {
                 if (vertices[i, 0] == -1) break;
-                if (vertices[i, 0] > largestX)
-                {
-                    largestX = vertices[i, 0];
-                }
-                if (vertices[i, 0] < lowestX)
-                {
-                    lowestX = vertices[i, 0];
-                }
                 if (vertices[i, 1] > largestY)
                 {
                     largestY = vertices[i, 1];
@@ -514,30 +497,18 @@ namespace asgn5v1
                 {
                     lowestY = vertices[i, 1];
                 }
-                if (vertices[i, 3] > largestZ)
-                {
-                    largestZ = vertices[i, 3];
-                }
-                if (vertices[i, 3] < lowestZ)
-                {
-                    lowestZ = vertices[i, 3];
-                }
             }
+            
+            scaleRatio = ClientSize.Height / 2.0d / (largestY - lowestY);
 
-            verticalHeightRatio = ClientSize.Height / 2.0d / (largestY - lowestY);
-            middleOfShapeX = (ClientSize.Width / 2.0d - largestX * verticalHeightRatio / 2) - lowestX;
-            middleOfShapeY = (ClientSize.Height / 2.0d - largestY * verticalHeightRatio / 2) - lowestY;
-            middleOfShapeZ = (largestZ - lowestZ) / 2;
+            //scale image
+            multiply(new double[,] { { scaleRatio, 0, 0, 0 }, { 0, scaleRatio, 0, 0 }, { 0, 0, scaleRatio, 0 }, { 0, 0, 0, 1 } });
 
-            A[0, 0] = verticalHeightRatio * 1.0d;
-            A[1, 1] = verticalHeightRatio * -1.0d;
-            A[2, 2] = verticalHeightRatio * -1.0d;
-            A[3, 0] = middleOfShapeX;
-            A[3, 1] = verticalHeightRatio * largestY + middleOfShapeY;
-            //A[3, 3] = verticalHeightRatio * largestY;
+            //center image in application
+            multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { ClientSize.Width / 2.0d, ClientSize.Height / 2.0d, 0,1} });
         }// end of setIdentity
 
-		private void Transformer_Load(object sender, System.EventArgs e)
+        private void Transformer_Load(object sender, System.EventArgs e)
 		{
 			
 		}
@@ -562,79 +533,55 @@ namespace asgn5v1
             ctrans = tempMatrix;
         }
 
-        private void toOrigin()
-        {
-            //TODO
-        }
-
-        private void center()
-        {
-            //TODO
-        }
-
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == transleftbtn)
 			{
-                double[,] leftTrans = new double[4, 4];
-                for(var i = 0; i < leftTrans.GetLength(1); ++i)
-                {
-                    leftTrans[i, i] = 1;
-                }
-                leftTrans[3, 0] = -75;
-                multiply(leftTrans);
+                multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { X_TRANSLATION, 0, 0, 1 } });
                 Refresh();
 			}
 			if (e.Button == transrightbtn) 
 			{
-                double[,] rightTrans = new double[4, 4];
-                for (var i = 0; i < rightTrans.GetLength(1); ++i)
-                {
-                    rightTrans[i, i] = 1;
-                }
-                rightTrans[3, 0] = 75;
-                multiply(rightTrans);
+                multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { -X_TRANSLATION, 0, 0, 1 } });
                 Refresh();
 			}
 			if (e.Button == transupbtn)
             {
-                double[,] upTrans = new double[4, 4];
-                for (var i = 0; i < upTrans.GetLength(1); ++i)
-                {
-                    upTrans[i, i] = 1;
-                }
-                upTrans[3, 1] = -35;
-                multiply(upTrans);
+                multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -Y_TRANSLATION, 0, 1 } });
                 Refresh();
 			}
 			
 			if(e.Button == transdownbtn)
             {
-                double[,] downTrans = new double[4, 4];
-                for (var i = 0; i < downTrans.GetLength(1); ++i)
-                {
-                    downTrans[i, i] = 1;
-                }
-                downTrans[3, 1] = 35;
-                multiply(downTrans);
+                multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, Y_TRANSLATION, 0, 1 } });
                 Refresh();
 			}
 			if (e.Button == scaleupbtn) //TODO
 			{
-                double[,] scaleUpTrans = new double[4, 4];
-                for (var i = 0; i < scaleUpTrans.GetLength(1); ++i)
-                {
-                    scaleUpTrans[i, i] = 1.1;
-                }
-                scaleUpTrans[3, 3] = 1;
-                //toOrigin();
-                multiply(scaleUpTrans);
+                List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+                ctrans[3, 0] -= points[0];
+                ctrans[3, 1] -= points[1];
+                ctrans[3, 2] -= points[2];
+
+                multiply(new double[,] { { SCALE_UP, 0, 0, 0 }, { 0, SCALE_UP, 0, 0 }, { 0, 0, SCALE_UP, 0 }, { 0, 0, 0, 1 } });
+                ctrans[3, 0] += points[0];
+                ctrans[3, 1] += points[1];
+                ctrans[3, 2] += points[2];
                 //center();
                 Refresh();
 			}
 			if (e.Button == scaledownbtn) 
 			{
-				Refresh();
+                List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+                ctrans[3, 0] -= points[0];
+                ctrans[3, 1] -= points[1];
+                ctrans[3, 2] -= points[2];
+
+                multiply(new double[,] { { .9, 0, 0, 0 }, { 0, .9, 0, 0 }, { 0, 0, .9, 0 }, { 0, 0, 0, 1 } });
+                ctrans[3, 0] += points[0];
+                ctrans[3, 1] += points[1];
+                ctrans[3, 2] += points[2];
+                Refresh();
 			}
 			if (e.Button == rotxby1btn) 
 			{
@@ -675,7 +622,7 @@ namespace asgn5v1
 
 			if (e.Button == resetbtn)
 			{
-				RestoreInitialImage();
+                setIdentity();
 			}
 
 			if(e.Button == exitbtn) 
