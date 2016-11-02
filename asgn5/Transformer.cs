@@ -18,6 +18,8 @@ namespace asgn5v1
         private const int X_TRANSLATION = -75;
         private const int Y_TRANSLATION = 35;
         private const double SCALE_UP = 1.1;
+        private static double COS = Math.Cos(.01);
+        private static double SIN = Math.Sin(.01);
         private System.ComponentModel.IContainer components;
 		//private bool GetNewData();
 
@@ -533,6 +535,19 @@ namespace asgn5v1
             ctrans = tempMatrix;
         }
 
+	    private void center(double x = 0.0, double y = 0.0, double z = 0.0)
+        {
+            ctrans[3, 0] += x;
+            ctrans[3, 1] += y;
+            ctrans[3, 2] += z;
+        }
+
+	    private void origin(double x = 0.0, double y = 0.0, double z = 0.0)
+        {
+            ctrans[3, 0] -= x;
+            ctrans[3, 1] -= y;
+            ctrans[3, 2] -= z;
+        }
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == transleftbtn)
@@ -559,42 +574,43 @@ namespace asgn5v1
 			if (e.Button == scaleupbtn) //TODO
 			{
                 List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
-                ctrans[3, 0] -= points[0];
-                ctrans[3, 1] -= points[1];
-                ctrans[3, 2] -= points[2];
-
+			    origin(points[0], points[1], points[2]);
                 multiply(new double[,] { { SCALE_UP, 0, 0, 0 }, { 0, SCALE_UP, 0, 0 }, { 0, 0, SCALE_UP, 0 }, { 0, 0, 0, 1 } });
-                ctrans[3, 0] += points[0];
-                ctrans[3, 1] += points[1];
-                ctrans[3, 2] += points[2];
-                //center();
+                center(points[0], points[1], points[2]);
                 Refresh();
 			}
 			if (e.Button == scaledownbtn) 
 			{
                 List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
-                ctrans[3, 0] -= points[0];
-                ctrans[3, 1] -= points[1];
-                ctrans[3, 2] -= points[2];
-
+                origin(points[0], points[1], points[2]);
                 multiply(new double[,] { { .9, 0, 0, 0 }, { 0, .9, 0, 0 }, { 0, 0, .9, 0 }, { 0, 0, 0, 1 } });
-                ctrans[3, 0] += points[0];
-                ctrans[3, 1] += points[1];
-                ctrans[3, 2] += points[2];
+                center(points[0], points[1], points[2]);
                 Refresh();
 			}
-			if (e.Button == rotxby1btn) 
-			{
-				
-			}
-			if (e.Button == rotyby1btn) 
-			{
-				
-			}
+            if (e.Button == rotxby1btn)
+            {
+                var points = new List<double> {scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3]};
+                origin(points[0], points[1], points[2]);
+                multiply(new[,] {{1, 0, 0, 0}, {0, COS, SIN, 0}, {0, -SIN, COS, 0}, {0, 0, 0, 1}});
+                center(points[0], points[1], points[2]);
+                Invalidate();
+            }
+			if (e.Button == rotyby1btn)
+            {
+                List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+                origin(points[0], points[1], points[2]);
+                multiply(new[,] { { COS, 0,SIN, 0 }, { 0, 1, 0, 0 }, { -SIN, 0, COS, 0 }, { 0, 0, 0, 1 } });
+                center(points[0], points[1], points[2]);
+                Invalidate();
+            }
 			if (e.Button == rotzby1btn) 
 			{
-				
-			}
+                List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+                origin(points[0], points[1], points[2]);
+                multiply(new[,] { { COS, SIN, 0, 0 }, { -SIN, COS, 0, 0 }, { 0, 0, 1,0 }, { 0, 0, 0, 1 } });
+                center(points[0], points[1], points[2]);
+                Invalidate();
+            }
 
 			if (e.Button == rotxbtn) 
 			{
@@ -612,18 +628,27 @@ namespace asgn5v1
 
 			if(e.Button == shearleftbtn)
 			{
-				Refresh();
+			    double alignY = ctrans[3, 1];
+                origin(y: alignY);
+                multiply(new[,] { { 1, 0, 0, 0 }, { .1, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } });
+                center(y: alignY);
+                Refresh();
 			}
 
-			if (e.Button == shearrightbtn) 
-			{
-				Refresh();
+			if (e.Button == shearrightbtn)
+            {
+                double alignY = ctrans[3, 1];
+                origin(y: alignY);
+                multiply(new[,] { { 1, 0, 0, 0 }, { -0.1, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } });
+                center(y: alignY);
+                Refresh();
 			}
 
 			if (e.Button == resetbtn)
 			{
                 setIdentity();
-			}
+                Refresh();
+            }
 
 			if(e.Button == exitbtn) 
 			{
