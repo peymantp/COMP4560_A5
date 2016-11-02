@@ -2,11 +2,8 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
 using System.IO;
-using System.Text;
 
 namespace asgn5v1
 {
@@ -20,6 +17,7 @@ namespace asgn5v1
         private const double SCALE_UP = 1.1;
         private static double COS = Math.Cos(.01);
         private static double SIN = Math.Sin(.01);
+        private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private System.ComponentModel.IContainer components;
 		//private bool GetNewData();
 
@@ -534,14 +532,12 @@ namespace asgn5v1
             }
             ctrans = tempMatrix;
         }
-
 	    private void center(double x = 0.0, double y = 0.0, double z = 0.0)
         {
             ctrans[3, 0] += x;
             ctrans[3, 1] += y;
             ctrans[3, 2] += z;
         }
-
 	    private void origin(double x = 0.0, double y = 0.0, double z = 0.0)
         {
             ctrans[3, 0] -= x;
@@ -550,7 +546,9 @@ namespace asgn5v1
         }
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
-			if (e.Button == transleftbtn)
+            timer.Stop();
+            timer = new Timer();
+            if (e.Button == transleftbtn)
 			{
                 multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { X_TRANSLATION, 0, 0, 1 } });
                 Refresh();
@@ -611,21 +609,24 @@ namespace asgn5v1
                 center(points[0], points[1], points[2]);
                 Invalidate();
             }
-
-			if (e.Button == rotxbtn) 
-			{
-				
-			}
-			if (e.Button == rotybtn) 
-			{
-				
-			}
-			
-			if (e.Button == rotzbtn) 
-			{
-				
-			}
-
+			if (e.Button == rotxbtn)
+            {
+                timer.Tick += new EventHandler(rotateX);
+                timer.Interval = 25; // in miliseconds
+                timer.Start();
+            }
+			if (e.Button == rotybtn)
+            {
+                timer.Tick += new EventHandler(rotateY);
+                timer.Interval = 25; // in miliseconds
+                timer.Start();
+            }
+			if (e.Button == rotzbtn)
+            {
+                timer.Tick += new EventHandler(rotateZ);
+                timer.Interval = 25; // in miliseconds
+                timer.Start();
+            }
 			if(e.Button == shearleftbtn)
 			{
 			    double alignY = ctrans[3, 1];
@@ -634,7 +635,6 @@ namespace asgn5v1
                 center(y: alignY);
                 Refresh();
 			}
-
 			if (e.Button == shearrightbtn)
             {
                 double alignY = ctrans[3, 1];
@@ -643,17 +643,39 @@ namespace asgn5v1
                 center(y: alignY);
                 Refresh();
 			}
-
 			if (e.Button == resetbtn)
 			{
                 setIdentity();
                 Refresh();
             }
-
 			if(e.Button == exitbtn) 
 			{
 				Close();
 			}
 		}
+        private void rotateX(object sender, EventArgs e)
+        {
+            var points = new List<double> { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+            origin(points[0], points[1], points[2]);
+            multiply(new[,] { { 1, 0, 0, 0 }, { 0, COS, SIN, 0 }, { 0, -SIN, COS, 0 }, { 0, 0, 0, 1 } });
+            center(points[0], points[1], points[2]);
+            Invalidate();
+        }
+        private void rotateY(object sender, EventArgs e)
+        {
+            List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+            origin(points[0], points[1], points[2]);
+            multiply(new[,] { { COS, 0, SIN, 0 }, { 0, 1, 0, 0 }, { -SIN, 0, COS, 0 }, { 0, 0, 0, 1 } });
+            center(points[0], points[1], points[2]);
+            Invalidate();
+        }
+        private void rotateZ(object sender, EventArgs e)
+        {
+            List<double> points = new List<double>() { scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2], scrnpts[0, 3] };
+            origin(points[0], points[1], points[2]);
+            multiply(new[,] { { COS, SIN, 0, 0 }, { -SIN, COS, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } });
+            center(points[0], points[1], points[2]);
+            Invalidate();
+        }
 	}
 }

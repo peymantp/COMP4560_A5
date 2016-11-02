@@ -46,3 +46,11 @@ G:\Users\Projects\COMP4560_A5\asgn5\obj\Debug\asgn5v1.Transformer.resources
 G:\Users\Projects\COMP4560_A5\asgn5\obj\Debug\asgn5v1.csproj.GenerateResource.Cache
 G:\Users\Projects\COMP4560_A5\asgn5\obj\Debug\asgn5v1.exe
 G:\Users\Projects\COMP4560_A5\asgn5\obj\Debug\asgn5v1.pdb
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.exe
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.pdb
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\bin\Debug\asgn5v1.exe
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\bin\Debug\asgn5v1.pdb
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.csprojResolveAssemblyReference.cache
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.AboutDialogBox.resources
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.Transformer.resources
+C:\Users\a00922386\Desktop\COMP4560_A5\asgn5\obj\Debug\asgn5v1.csproj.GenerateResource.Cache
