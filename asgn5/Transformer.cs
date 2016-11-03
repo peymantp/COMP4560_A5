@@ -15,8 +15,8 @@ namespace asgn5v1
         private const int X_TRANSLATION = -75;
         private const int Y_TRANSLATION = 35;
         private const double SCALE_UP = 1.1;
-        private static double COS = Math.Cos(.01);
-        private static double SIN = Math.Sin(.01);
+        private static double COS = Math.Cos(.05);
+        private static double SIN = Math.Sin(.05);
         private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private System.ComponentModel.IContainer components;
 		//private bool GetNewData();
@@ -314,6 +314,7 @@ namespace asgn5v1
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(508, 306);
             this.Controls.Add(this.toolBar1);
+            this.DoubleBuffered = true;
             this.Name = "Transformer";
             this.Load += new System.EventHandler(this.Transformer_Load);
             this.ResumeLayout(false);
@@ -612,19 +613,19 @@ namespace asgn5v1
 			if (e.Button == rotxbtn)
             {
                 timer.Tick += new EventHandler(rotateX);
-                timer.Interval = 25; // in miliseconds
+                timer.Interval = 20; // in miliseconds
                 timer.Start();
             }
 			if (e.Button == rotybtn)
             {
                 timer.Tick += new EventHandler(rotateY);
-                timer.Interval = 25; // in miliseconds
+                timer.Interval = 20; // in miliseconds
                 timer.Start();
             }
 			if (e.Button == rotzbtn)
             {
                 timer.Tick += new EventHandler(rotateZ);
-                timer.Interval = 25; // in miliseconds
+                timer.Interval = 20; // in miliseconds
                 timer.Start();
             }
 			if(e.Button == shearleftbtn)
