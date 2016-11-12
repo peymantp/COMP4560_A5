@@ -356,9 +356,14 @@ namespace asgn5v1
                     }
                 }
 
+                Random randomGen = new Random();
                 //now draw the lines
                 for (int i = 0; i < numlines; i++)
                 {
+
+                    //KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+                    //KnownColor randomColorName = names[randomGen.Next(names.Length)];
+                    pen.Color = randomColor();
                     grfx.DrawLine(pen, 
                         (int)scrnpts[lines[i, 0], 0], //x1
                         (int)scrnpts[lines[i, 0], 1], //y1
@@ -514,6 +519,13 @@ namespace asgn5v1
 			
 		}
 
+	    Color randomColor()
+	    {
+            Random randomGen = new Random();
+            KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+	        KnownColor randomColorName = names[randomGen.Next(names.Length)];
+            return Color.FromKnownColor(randomColorName);
+        }
         private void multiply(double[,] tran)
         {
             int k;
@@ -548,7 +560,7 @@ namespace asgn5v1
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
             timer.Stop();
-            timer = new Timer();
+            //timer = new Timer();
             if (e.Button == transleftbtn)
 			{
                 multiply(new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { X_TRANSLATION, 0, 0, 1 } });
